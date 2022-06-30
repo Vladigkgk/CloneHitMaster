@@ -8,11 +8,8 @@ namespace Assets.Scripts.UI
     {
         [SerializeField] private RectTransform _container;
         [SerializeField] private GameObject _text;
-        [SerializeField] private Vector3 _offsetPos;
-        [SerializeField] private float _distance;
 
         private PlayerController _player;
-        private Ray _ray;
 
         private void Start()
         {
@@ -28,8 +25,12 @@ namespace Assets.Scripts.UI
                 return;
             }
 
-            _ray = Camera.main.ScreenPointToRay(eventData.position);
-            _player.Shot(_ray.GetPoint(_distance));
+            Ray ray = Camera.main.ScreenPointToRay(eventData.position);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, 100f))
+            {
+                _player.Shot(hit.point);
+            }
         }
        
         private void HideText()
